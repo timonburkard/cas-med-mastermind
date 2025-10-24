@@ -20,6 +20,7 @@ end entity;
 
 architecture fsm of game_logic is
     type state_t is (STATE_RESET, STATE_RUNNING, STATE_END);
+    type values_t is array (3 downto 0) of std_logic_vector(3 downto 0);
 
     signal current_state : state_t := STATE_RESET;
     signal next_state    : state_t := STATE_RESET;
@@ -28,25 +29,28 @@ architecture fsm of game_logic is
 
     signal code : std_logic_vector(15 downto 0);
 
+    signal guess_value : values_t;
+    signal code_value  : values_t;
+
     function calc_exact_hits(
-        guess : std_logic_vector(15 downto 0);
-        code  : std_logic_vector(15 downto 0)
+        guess : values_t;
+        code  : values_t
     ) return std_logic_vector is
         variable counter : integer range 0 to 4 := 0;
     begin
-        if guess(15 downto 12) = code(15 downto 12) then
+        if guess(3) = code(3) then
             counter := counter + 1;
         end if;
 
-        if guess(11 downto 8) = code(11 downto 8) then
+        if guess(2) = code(2) then
             counter := counter + 1;
         end if;
 
-        if guess(7 downto 4) = code(7 downto 4) then
+        if guess(1) = code(1) then
             counter := counter + 1;
         end if;
 
-        if guess(3 downto 0) = code(3 downto 0) then
+        if guess(0) = code(0) then
             counter := counter + 1;
         end if;
 
@@ -54,14 +58,25 @@ architecture fsm of game_logic is
     end function;
 
     function calc_partial_hits(
-        guess : std_logic_vector(15 downto 0);
-        code  : std_logic_vector(15 downto 0)
+        guess : values_t;
+        code  : values_t
     ) return std_logic_vector is
     begin
         return std_logic_vector(to_unsigned(0, 3)); -- TODO: implementation
     end function;
 begin
     round <= std_logic_vector(to_unsigned(round_counter, round'length));
+
+    -- adapters for easy handling
+    guess_value(3) <= guess(15 downto 12);
+    guess_value(2) <= guess(11 downto 8);
+    guess_value(1) <= guess(7 downto 4);
+    guess_value(0) <= guess(3 downto 0);
+
+    code_value(3) <= code(15 downto 12);
+    code_value(2) <= code(11 downto 8);
+    code_value(1) <= code(7 downto 4);
+    code_value(0) <= code(3 downto 0);
 
     sequential : process (all)
     begin
@@ -88,8 +103,8 @@ begin
                     if (round_counter = 0) or (guess_enter_sync = '1') then
                         round_counter <= round_counter + 1;
 
-                        exact_hits   <= calc_exact_hits(guess, code);
-                        partial_hits <= calc_partial_hits(guess, code);
+                        exact_hits   <= calc_exact_hits(guess_value, code_value);
+                        partial_hits <= calc_partial_hits(guess_value, code_value);
                     end if;
 
                     if to_integer(unsigned(exact_hits)) = 4 then
