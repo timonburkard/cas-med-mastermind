@@ -7,15 +7,9 @@ entity game_logic is
     port (
         clk              : in std_logic;                     -- 125 MHz clock
         rst              : in std_logic;                     -- Synchronous high-active reset
-        guess_3          : in std_logic_vector(3 downto 0);  -- Guess digit 3: most-significant digit
-        guess_2          : in std_logic_vector(3 downto 0);  -- Guess digit 2
-        guess_1          : in std_logic_vector(3 downto 0);  -- Guess digit 1
-        guess_0          : in std_logic_vector(3 downto 0);  -- Guess digit 0: least-significant digit
+        guess            : in std_logic_vector(15 downto 0); -- Guess digit
         guess_enter_sync : in std_logic;                     -- Guess enter (single cycle pulse, synced/debounced)
-        random_number_3  : in std_logic_vector(3 downto 0);  -- Random number digit 3: most-significant digit
-        random_number_2  : in std_logic_vector(3 downto 0);  -- Random number digit 2
-        random_number_1  : in std_logic_vector(3 downto 0);  -- Random number digit 1
-        random_number_0  : in std_logic_vector(3 downto 0);  -- Random number digit 0: least-significant digit
+        random_number    : in std_logic_vector(15 downto 0); -- Random number digits
         round            : out std_logic_vector(3 downto 0); -- Current round indicator
         exact_hits       : out std_logic_vector(2 downto 0); -- Number of exact hits (asses)
         partial_hits     : out std_logic_vector(2 downto 0)  -- Number of partial hits (guts)
@@ -30,29 +24,26 @@ architecture fsm of game_logic is
 
     signal round_counter : integer range 0 to 15 := 0;
 
-    signal code_3 : std_logic_vector(3 downto 0);
-    signal code_2 : std_logic_vector(3 downto 0);
-    signal code_1 : std_logic_vector(3 downto 0);
-    signal code_0 : std_logic_vector(3 downto 0);
+    signal code : std_logic_vector(15 downto 0);
 
     function calc_exact_hits(
-        guess_3, guess_2, guess_1, guess_0, code_3, code_2, code_1, code_0 : std_logic_vector(3 downto 0)
+        guess, code : std_logic_vector(3 downto 0)
     ) return std_logic_vector(2 downto 0) is
         variable counter : integer := 0;
     begin
-        if guess_3 = code_3 then
+        if guess(15 downto 12) = code(15 downto 12) then
             counter := counter + 1;
         end if;
 
-        if guess_2 = code_2 then
+        if guess(11 downto 8) = code(11 downto 8) then
             counter := counter + 1;
         end if;
 
-        if guess_1 = code_1 then
+        if guess(7 downto 4) = code(7 downto 4) then
             counter := counter + 1;
         end if;
 
-        if guess_0 = code_0 then
+        if guess(3 downto 0) = code(3 downto 0) then
             counter := counter + 1;
         end if;
 
@@ -60,7 +51,7 @@ architecture fsm of game_logic is
     end function;
 
     function calc_partial_hits(
-        guess_3, guess_2, guess_1, guess_0, code_3, code_2, code_1, code_0 : std_logic_vector(3 downto 0)
+        guess, code : std_logic_vector(3 downto 0)
     ) return std_logic_vector(2 downto 0) is
     begin
         return std_logic_vector(to_unsigned(0, 3)); -- TODO: implementation
@@ -83,10 +74,7 @@ begin
                     partial_hits  <= (others => '0');
 
                     if guess_enter_sync = '1' then
-                        code_3 <= random_number_3;
-                        code_2 <= random_number_2;
-                        code_1 <= random_number_1;
-                        code_0 <= random_number_0;
+                        code <= random_number;
 
                         next_state <= STATE_RUNNING;
                     end if;
@@ -96,8 +84,8 @@ begin
                     if (round_counter = 0) or (guess_enter_sync = '1') then
                         round_counter <= round_counter + 1;
 
-                        exact_hits   <= calc_exact_hits(guess_3, guess_2, guess_1, guess_0, code_3, code_2, code_1, code_0);
-                        partial_hits <= calc_partial_hits(guess_3, guess_2, guess_1, guess_0, code_3, code_2, code_1, code_0);
+                        exact_hits   <= calc_exact_hits(guess, code);
+                        partial_hits <= calc_partial_hits(guess, code);
                     end if;
 
                     if to_integer(unsigned(exact_hits)) = 4 then
