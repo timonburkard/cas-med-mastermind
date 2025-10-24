@@ -6,4 +6,5 @@
 # Defines library default
 default.files = [
   '2_hdl/src/*.vhd',
+  '2_hdl/tb/*.vhd',
 ]
