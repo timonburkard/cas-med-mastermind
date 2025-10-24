@@ -18,7 +18,7 @@ library work;
 
 entity prescaler is
     generic (
-        g_max : natural := C_MAX1_SIM;
+        g_max : natural := C_MAX1_SIM
     );
     port (
         clk     : in std_ulogic;
