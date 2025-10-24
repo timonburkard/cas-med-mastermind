@@ -17,7 +17,7 @@ ARCHITECTURE behavioral OF tb_pmod_ssd IS
             g_clk_per_digit : NATURAL := C_NOF_SWAP_CYCLES_SIM
         );
         PORT (
-            reset_n      : IN  std_ulogic;
+            rst      : IN  std_ulogic;
             clk          : IN  std_ulogic;
             exact_hits   : IN  std_ulogic_vector (2 DOWNTO 0);
             partial_hits : IN  std_ulogic_vector (2 DOWNTO 0);
@@ -28,7 +28,7 @@ ARCHITECTURE behavioral OF tb_pmod_ssd IS
     
     -- Test signals
     SIGNAL clk          : std_ulogic := '0';
-    SIGNAL reset_n      : std_ulogic := '0';
+    SIGNAL rst     : std_ulogic := '0';
     SIGNAL exact_hits   : std_ulogic_vector(2 DOWNTO 0) := "000";
     SIGNAL partial_hits : std_ulogic_vector(2 DOWNTO 0) := "000";
     SIGNAL digit        : std_ulogic_vector(6 DOWNTO 0);
@@ -69,7 +69,7 @@ BEGIN
             g_clk_per_digit => test_clk_per_digit
         )
         PORT MAP (
-            reset_n      => reset_n,
+            rst      => rst,
             clk          => clk,
             exact_hits   => exact_hits,
             partial_hits => partial_hits,
@@ -101,7 +101,7 @@ BEGIN
         REPORT "TEST 1: Reset Behavior";
         REPORT "========================================";
         
-        reset_n <= '0';
+        rst <= '1';
         exact_hits <= "000";
         partial_hits <= "000";
         WAIT FOR clk_period * 5;
@@ -178,80 +178,77 @@ BEGIN
         
         REPORT "PASS: Display correctly alternates between 3 and 2";
         
-        -- ========================================
-        -- TEST 4: All digits 0-7 (test range)
-        -- ========================================
-        REPORT "";
-        REPORT "========================================";
-        REPORT "TEST 4: Test All Valid Digits (0-7)";
-        REPORT "========================================";
-        
-        FOR test_val IN 0 TO 7 LOOP
-            reset_n <= '0';
-            WAIT FOR clk_period * 2;
-            reset_n <= '1';
-            
-            exact_hits <= std_ulogic_vector(to_unsigned(test_val, 3));
-            partial_hits <= std_ulogic_vector(to_unsigned(7 - test_val, 3));
-            
-            WAIT FOR clk_period * 3;
-            
-            -- Check exact hits display
-            WAIT UNTIL digit_sel = '0' FOR clk_period * (test_clk_per_digit + 5);
-            WAIT FOR clk_period * 2;
-            
-            REPORT "Testing value " & INTEGER'image(test_val) & 
-                   ": Display shows '" & CHARACTER'image(seg_to_char(digit)) & "'";
-            
-            -- Verify correct segment pattern
-            CASE test_val IS
-                WHEN 0 => ASSERT digit = C_0 REPORT "ERROR: Digit 0 incorrect" SEVERITY error;
-                WHEN 1 => ASSERT digit = C_1 REPORT "ERROR: Digit 1 incorrect" SEVERITY error;
-                WHEN 2 => ASSERT digit = C_2 REPORT "ERROR: Digit 2 incorrect" SEVERITY error;
-                WHEN 3 => ASSERT digit = C_3 REPORT "ERROR: Digit 3 incorrect" SEVERITY error;
-                WHEN 4 => ASSERT digit = C_4 REPORT "ERROR: Digit 4 incorrect" SEVERITY error;
-                WHEN 5 => ASSERT digit = C_5 REPORT "ERROR: Digit 5 incorrect" SEVERITY error;
-                WHEN 6 => ASSERT digit = C_6 REPORT "ERROR: Digit 6 incorrect" SEVERITY error;
-                WHEN 7 => ASSERT digit = C_7 REPORT "ERROR: Digit 7 incorrect" SEVERITY error;
-                WHEN OTHERS => NULL;
-            END CASE;
-        END LOOP;
+-- ========================================
+-- TEST 4: Test All Valid Digits (0-7)
+-- ========================================
+REPORT "";
+REPORT "========================================";
+REPORT "TEST 4: Test All Valid Digits (0-7)";
+REPORT "========================================";
+
+FOR test_val IN 0 TO 7 LOOP
+    reset_n <= '0';
+    WAIT FOR clk_period * 2;
+    reset_n <= '1';
+    
+    exact_hits <= std_ulogic_vector(to_unsigned(test_val, 3));
+    partial_hits <= std_ulogic_vector(to_unsigned(7 - test_val, 3));
+    
+    WAIT FOR clk_period * 3;
+    
+    -- ============================================
+    -- Check EXACT HITS display (digit_sel = '0')
+    -- ============================================
+    WAIT UNTIL digit_sel = '0' FOR clk_period * (test_clk_per_digit + 5);
+    WAIT FOR clk_period * 2;
+    
+    REPORT "Testing exact_hits = " & INTEGER'image(test_val) & 
+           ": Display shows '" & CHARACTER'image(seg_to_char(digit)) & "'";
+    
+    -- Verify correct segment pattern for exact_hits
+    CASE test_val IS
+        WHEN 0 => ASSERT digit = C_0 REPORT "ERROR: Exact hits digit 0 incorrect" SEVERITY error;
+        WHEN 1 => ASSERT digit = C_1 REPORT "ERROR: Exact hits digit 1 incorrect" SEVERITY error;
+        WHEN 2 => ASSERT digit = C_2 REPORT "ERROR: Exact hits digit 2 incorrect" SEVERITY error;
+        WHEN 3 => ASSERT digit = C_3 REPORT "ERROR: Exact hits digit 3 incorrect" SEVERITY error;
+        WHEN 4 => ASSERT digit = C_4 REPORT "ERROR: Exact hits digit 4 incorrect" SEVERITY error;
+        WHEN 5 => ASSERT digit = C_5 REPORT "ERROR: Exact hits digit 5 incorrect" SEVERITY error;
+        WHEN 6 => ASSERT digit = C_6 REPORT "ERROR: Exact hits digit 6 incorrect" SEVERITY error;
+        WHEN 7 => ASSERT digit = C_7 REPORT "ERROR: Exact hits digit 7 incorrect" SEVERITY error;
+        WHEN OTHERS => NULL;
+    END CASE;
+    
+    -- ===============================================
+    -- Check PARTIAL HITS display (digit_sel = '1')
+    -- ===============================================
+    WAIT UNTIL digit_sel = '1' FOR clk_period * (test_clk_per_digit + 5);
+    WAIT FOR clk_period * 2;
+    
+    REPORT "Testing partial_hits = " & INTEGER'image(7 - test_val) & 
+           ": Display shows '" & CHARACTER'image(seg_to_char(digit)) & "'";
+    
+    -- Verify correct segment pattern for partial_hits
+    CASE (7 - test_val) IS
+        WHEN 0 => ASSERT digit = C_0 REPORT "ERROR: Partial hits digit 0 incorrect" SEVERITY error;
+        WHEN 1 => ASSERT digit = C_1 REPORT "ERROR: Partial hits digit 1 incorrect" SEVERITY error;
+        WHEN 2 => ASSERT digit = C_2 REPORT "ERROR: Partial hits digit 2 incorrect" SEVERITY error;
+        WHEN 3 => ASSERT digit = C_3 REPORT "ERROR: Partial hits digit 3 incorrect" SEVERITY error;
+        WHEN 4 => ASSERT digit = C_4 REPORT "ERROR: Partial hits digit 4 incorrect" SEVERITY error;
+        WHEN 5 => ASSERT digit = C_5 REPORT "ERROR: Partial hits digit 5 incorrect" SEVERITY error;
+        WHEN 6 => ASSERT digit = C_6 REPORT "ERROR: Partial hits digit 6 incorrect" SEVERITY error;
+        WHEN 7 => ASSERT digit = C_7 REPORT "ERROR: Partial hits digit 7 incorrect" SEVERITY error;
+        WHEN OTHERS => NULL;
+    END CASE;
+    
+    REPORT "  ? Exact: " & INTEGER'image(test_val) & " ?, Partial: " & INTEGER'image(7 - test_val) & " ?";
+    REPORT "";
+    
+END LOOP;
+
+REPORT "PASS: All digits (0-7) display correctly on both displays";
         
         REPORT "PASS: All digits (0-7) display correctly";
-        
-        -- ========================================
-        -- TEST 5: Maximum values
-        -- ========================================
-        REPORT "";
-        REPORT "========================================";
-        REPORT "TEST 5: Maximum Values (7 exact, 7 partial)";
-        REPORT "========================================";
-        
-        reset_n <= '0';
-        WAIT FOR clk_period * 2;
-        reset_n <= '1';
-        
-        exact_hits <= "111";   -- 7
-        partial_hits <= "111"; -- 7
-        WAIT FOR clk_period * 2;
-        
-        -- Wait for exact hits display
-        WAIT UNTIL digit_sel = '0' FOR clk_period * (test_clk_per_digit + 5);
-        WAIT FOR clk_period * 2;
-        
-        ASSERT digit = C_7
-            REPORT "ERROR: Expected '7' on exact hits display"
-            SEVERITY error;
-        
-        -- Wait for partial hits display
-        WAIT UNTIL digit_sel = '1' FOR clk_period * (test_clk_per_digit + 5);
-        WAIT FOR clk_period * 2;
-        
-        ASSERT digit = C_7
-            REPORT "ERROR: Expected '7' on partial hits display"
-            SEVERITY error;
-        
-        REPORT "PASS: Maximum values display correctly";
+    
         
         -- ========================================
         -- TEST 6: Switching frequency
@@ -319,24 +316,6 @@ BEGIN
         WAIT FOR clk_period * 5;
         
         REPORT "PASS: Reset during operation works correctly";
-        
-        -- ========================================
-        -- TEST 8: Rapid value changes
-        -- ========================================
-        REPORT "";
-        REPORT "========================================";
-        REPORT "TEST 8: Rapid Input Value Changes";
-        REPORT "========================================";
-        
-        reset_n <= '1';
-        
-        FOR test_iteration IN 0 TO 5 LOOP
-            exact_hits <= std_ulogic_vector(to_unsigned(test_iteration, 3));
-            partial_hits <= std_ulogic_vector(to_unsigned(5 - test_iteration, 3));
-            WAIT FOR clk_period * 3;
-        END LOOP;
-        
-        REPORT "PASS: Rapid value changes handled correctly";
         
         -- ========================================
         -- Test Complete
