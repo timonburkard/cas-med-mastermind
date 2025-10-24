@@ -3,6 +3,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.mastermind_pkg.all;
+
 entity game_logic is
     port (
         clk              : in std_logic;                     -- 125 MHz clock
@@ -27,8 +29,9 @@ architecture fsm of game_logic is
     signal code : std_logic_vector(15 downto 0);
 
     function calc_exact_hits(
-        guess, code : std_logic_vector(3 downto 0)
-    ) return std_logic_vector(2 downto 0) is
+        guess : std_logic_vector(15 downto 0);
+        code  : std_logic_vector(15 downto 0)
+    ) return std_logic_vector is
         variable counter : integer range 0 to 4 := 0;
     begin
         if guess(15 downto 12) = code(15 downto 12) then
@@ -51,8 +54,9 @@ architecture fsm of game_logic is
     end function;
 
     function calc_partial_hits(
-        guess, code : std_logic_vector(3 downto 0)
-    ) return std_logic_vector(2 downto 0) is
+        guess : std_logic_vector(15 downto 0);
+        code  : std_logic_vector(15 downto 0)
+    ) return std_logic_vector is
     begin
         return std_logic_vector(to_unsigned(0, 3)); -- TODO: implementation
     end function;
