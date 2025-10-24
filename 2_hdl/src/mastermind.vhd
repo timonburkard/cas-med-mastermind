@@ -22,6 +22,7 @@ architecture struct of mastermind is
     signal random_number    : std_logic_vector(15 downto 0);
     signal exact_hits       : std_logic_vector(2 downto 0);
     signal partial_hits     : std_logic_vector(2 downto 0);
+    signal p1khz            : std_logic; -- 1 kHz pulse from prescaler
 begin
     game_logic : entity work.game_logic
         port map(
@@ -53,6 +54,25 @@ begin
             partial_hits => partial_hits,
             digit        => digit,
             digit_sel    => digit_sel
+        );
+
+    prescaler : entity work.prescaler
+        generic map(
+            g_max => C_MAX1_SYN
+        )
+        port map(
+            clk   => clk,
+            rst   => rst,
+            p1khz => p1khz
+        );
+
+    debounce : entity work.debounce
+        port map(
+            rst              => rst,
+            clk              => clk,
+            p1khz            => p1khz,
+            guess_enter      => guess_enter,
+            guess_enter_sync => guess_enter_sync
         );
 
 end architecture;
