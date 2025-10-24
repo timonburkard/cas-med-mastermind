@@ -2,13 +2,13 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
- 
+
 entity random_number_generator is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
            random_number : out STD_LOGIC_VECTOR(15 downto 0));
 end random_number_generator;
- 
+
 architecture Behavioral of random_number_generator is
     constant SEED : STD_LOGIC_VECTOR(15 downto 0) := "1001011001110001";
 
@@ -22,7 +22,7 @@ begin
             random_number <= "0000000000000000";
         elsif rising_edge(clk) then
             -- 16-bit LFSR with taps at 16,15,13,4
-            lfsr_reg <= lfsr_reg(14 downto 0) & 
+            lfsr_reg <= lfsr_reg(14 downto 0) &
                         (lfsr_reg(15) xor lfsr_reg(14) xor lfsr_reg(12) xor lfsr_reg(3));
         end if;
     end process;
@@ -30,7 +30,7 @@ begin
     -- sequential process for updating random_number
     p_sequential: process(all)
     begin
-        -- store lfsr value in random_number 
+        -- store lfsr value in random_number
         if lfsr_reg(15 downto 12) < "1010" then
             random_number(15 downto 12) <= lfsr_reg(15 downto 12);
         end if;
