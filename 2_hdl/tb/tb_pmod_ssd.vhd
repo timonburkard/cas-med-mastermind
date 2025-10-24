@@ -120,7 +120,7 @@ BEGIN
         REPORT "TEST 2: Display Zeros (0 exact, 0 partial)";
         REPORT "========================================";
         
-        reset_n <= '1';
+        rst <= '0';
         exact_hits <= "000";   -- 0
         partial_hits <= "000"; -- 0
         WAIT FOR clk_period * 2;
@@ -143,9 +143,9 @@ BEGIN
         REPORT "TEST 3: Different Values (3 exact, 2 partial)";
         REPORT "========================================";
         
-        reset_n <= '0';
+        rst <= '1';
         WAIT FOR clk_period * 2;
-        reset_n <= '1';
+        rst <= '0';
         
         exact_hits <= "011";   -- 3
         partial_hits <= "010"; -- 2
@@ -187,9 +187,9 @@ REPORT "TEST 4: Test All Valid Digits (0-7)";
 REPORT "========================================";
 
 FOR test_val IN 0 TO 7 LOOP
-    reset_n <= '0';
+    rst <= '1';
     WAIT FOR clk_period * 2;
-    reset_n <= '1';
+    rst <= '0';
     
     exact_hits <= std_ulogic_vector(to_unsigned(test_val, 3));
     partial_hits <= std_ulogic_vector(to_unsigned(7 - test_val, 3));
@@ -258,9 +258,9 @@ REPORT "PASS: All digits (0-7) display correctly on both displays";
         REPORT "TEST 6: Display Switching Frequency";
         REPORT "========================================";
         
-        reset_n <= '0';
+        rst <= '1';
         WAIT FOR clk_period * 2;
-        reset_n <= '1';
+        rst <= '0';
         
         exact_hits <= "101";   -- 5
         partial_hits <= "010"; -- 2
@@ -298,13 +298,13 @@ REPORT "PASS: All digits (0-7) display correctly on both displays";
         
         exact_hits <= "110";   -- 6
         partial_hits <= "011"; -- 3
-        reset_n <= '1';
+        rst <= '0';
         
         -- Let it run for a while
         WAIT FOR clk_period * 20;
         
         -- Apply reset
-        reset_n <= '0';
+        rst <= '1';
         WAIT FOR clk_period * 3;
         
         ASSERT digit_sel = '0'
@@ -312,7 +312,7 @@ REPORT "PASS: All digits (0-7) display correctly on both displays";
             SEVERITY error;
         
         -- Release reset
-        reset_n <= '1';
+        rst <= '0';
         WAIT FOR clk_period * 5;
         
         REPORT "PASS: Reset during operation works correctly";
