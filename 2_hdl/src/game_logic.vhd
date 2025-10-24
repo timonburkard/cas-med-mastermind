@@ -29,7 +29,7 @@ architecture fsm of game_logic is
     function calc_exact_hits(
         guess, code : std_logic_vector(3 downto 0)
     ) return std_logic_vector(2 downto 0) is
-        variable counter : integer := 0;
+        variable counter : integer range 0 to 4 := 0;
     begin
         if guess(15 downto 12) = code(15 downto 12) then
             counter := counter + 1;
