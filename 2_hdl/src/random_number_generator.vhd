@@ -28,31 +28,44 @@ begin
     -- synchronous process for generating the next random number
     process(all)
     begin
-        if rst = '1' then
-            lfsr_reg <= SEED; -- seed value
-            random_number <= "0000000000000000";
-        elsif rising_edge(clk) then
+        if rising_edge(clk) then
             -- 16-bit LFSR with taps at 16,15,13,4
             lfsr_reg <= lfsr_reg(14 downto 0) &
                         (lfsr_reg(15) xor lfsr_reg(14) xor lfsr_reg(12) xor lfsr_reg(3));
+
+            if rst = '1' then
+                lfsr_reg <= SEED; -- seed value
+                -- random_number <= "0000000000000000";
+            end if;
         end if;
     end process;
 
     -- sequential process for updating random_number
     p_sequential: process(all)
     begin
-        -- store lfsr value in random_number
+        -- store lfsr value in random_number but only if the number is in a valid range (<10)
         if lfsr_reg(15 downto 12) < "1010" then
             random_number(15 downto 12) <= lfsr_reg(15 downto 12);
+        else
+            random_number(15 downto 12) <= random_number(15 downto 12);
         end if;
+
         if lfsr_reg(11 downto 8) < "1010" then
             random_number(11 downto 8) <= lfsr_reg(11 downto 8);
+        else
+            random_number(11 downto 8) <= random_number(11 downto 8);
         end if;
+
         if lfsr_reg(7 downto 4) < "1010" then
             random_number(7 downto 4) <= lfsr_reg(7 downto 4);
+        else
+            random_number(7 downto 4) <= random_number(7 downto 4);
         end if;
+
         if lfsr_reg(3 downto 0) < "1010" then
             random_number(3 downto 0) <= lfsr_reg(3 downto 0);
+        else
+            random_number(3 downto 0) <= random_number(3 downto 0);
         end if;
     end process;
 
