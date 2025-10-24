@@ -12,13 +12,13 @@ ARCHITECTURE Behavioral OF tb_generator IS
     COMPONENT random_number_generator IS
         PORT (
             clk : IN STD_LOGIC;
-            reset : IN STD_LOGIC;
+            rst : IN STD_LOGIC;
             random_number : OUT STD_LOGIC_VECTOR(15 DOWNTO 0));
     END COMPONENT;
 
     -- Test signals
     SIGNAL clk : STD_LOGIC := '0';
-    SIGNAL reset : STD_LOGIC := '0';
+    SIGNAL rst : STD_LOGIC := '1';
     SIGNAL random_number_test : STD_LOGIC_VECTOR(15 DOWNTO 0);
 
     -- Clock period
@@ -41,7 +41,7 @@ BEGIN
     uut : random_number_generator
     PORT MAP(
         clk => clk,
-        reset => reset,
+        rst => rst,
         random_number => random_number_test
     );
 
@@ -73,20 +73,20 @@ BEGIN
         VARIABLE max_deviation : INTEGER := 0;
         VARIABLE zero_output_detected : BOOLEAN := false;
     BEGIN
-        -- Test 1: Reset behavior
+        -- Test 1: rst behavior
         REPORT "========================================";
-        REPORT "TEST 1: Reset Behavior";
+        REPORT "TEST 1: rst Behavior";
         REPORT "========================================";
 
-        reset <= '1';
+        rst <= '1';
         WAIT FOR clk_period * 2;
-        reset <= '0';
+        rst <= '0';
         WAIT FOR clk_period;
 
         ASSERT random_number_test = "1001011001110001"
-            REPORT "ERROR: Reset did not set correct seed value!"
+            REPORT "ERROR: rst did not set correct seed value!"
             SEVERITY error;
-        REPORT "PASS: Reset sets correct seed value";
+        REPORT "PASS: rst sets correct seed value";
 
         WAIT FOR clk_period * 2;
 
@@ -95,9 +95,9 @@ BEGIN
         REPORT "TEST 2: Sequence Generation and Period";
         REPORT "========================================";
 
-        reset <= '1';
+        rst <= '1';
         WAIT FOR clk_period;
-        reset <= '0';
+        rst <= '0';
         WAIT FOR clk_period;
 
         first_value := random_number_test;
@@ -155,9 +155,9 @@ BEGIN
         REPORT "";
 
         -- Initialize
-        reset <= '1';
+        rst <= '1';
         WAIT FOR clk_period * 2;
-        reset <= '0';
+        rst <= '0';
         WAIT FOR clk_period;
 
         -- Generate 1000 vectors and count digit occurrences
@@ -277,24 +277,24 @@ BEGIN
                 INTEGER'image((total_invalid_digits * 100) / 4000) & "%";
         END IF;
 
-        -- Test 5: Multiple reset cycles
+        -- Test 5: Multiple rst cycles
         REPORT "";
         REPORT "========================================";
-        REPORT "TEST 5: Multiple Reset Cycles";
+        REPORT "TEST 5: Multiple rst Cycles";
         REPORT "========================================";
 
         FOR i IN 1 TO 5 LOOP
-            reset <= '1';
+            rst <= '1';
             WAIT FOR clk_period;
-            reset <= '0';
+            rst <= '0';
             WAIT FOR clk_period;
 
             ASSERT random_number_test = "1001011001110001"
-                REPORT "ERROR: Reset " & INTEGER'image(i) & " failed!"
+                REPORT "ERROR: rst " & INTEGER'image(i) & " failed!"
                 SEVERITY error;
         END LOOP;
 
-        REPORT "PASS: Multiple resets work correctly";
+        REPORT "PASS: Multiple rsts work correctly";
 
         -- Test complete
         REPORT "";
