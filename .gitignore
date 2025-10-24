@@ -1,0 +1,20 @@
+# QuestaSim: Ignore everything but DO files
+3_questasim/*
+!3_questasim/
+!3_questasim/modelsim.ini
+!3_questasim/scripts/
+!3_questasim/scripts/*.do
+
+# Vivado: Ignore everything but XDC files
+4_vivado/*
+!4_vivado/
+!4_vivado/*.tcl
+!4_vivado/constraints/
+!4_vivado/constraints/*.xdc
+
+# Compiled libraries
+work/*
+
+*.wlf
+*.ini
+*.opt
