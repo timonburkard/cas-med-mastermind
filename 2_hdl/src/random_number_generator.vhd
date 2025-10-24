@@ -1,4 +1,15 @@
--- Linear Feedback Shift Register for random code generation
+-- Project : mastermind
+-----------------------------------------------------
+-- File    : mastermind_pkg.vhd
+-- Library : mastermind_lib
+-- Author  : matthias.schaer1@students.fhnw.ch
+-- Company : Institute of Microelectronics (IME) FHNW
+-- Copyright(C) IME
+-----------------------------------------------------
+-- Description : This design generates random numbers
+--               using a linear feedback shift
+--               register xoring several bits
+-----------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;

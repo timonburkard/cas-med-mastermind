@@ -1,8 +1,7 @@
+-- Project : mastermind
 -----------------------------------------------------
--- Project : stopwatch
------------------------------------------------------
--- File    : pmod_ssd.vhd
--- Library : stop_watch_lib
+-- File    : mastermind_pkg.vhd
+-- Library : mastermind_lib
 -- Author  : matthias.schaer1@students.fhnw.ch
 -- Company : Institute of Microelectronics (IME) FHNW
 -- Copyright(C) IME

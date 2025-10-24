@@ -1,16 +1,11 @@
 -----------------------------------------------------
--- Project : stopwatch
+-- Project : mastermind
 -----------------------------------------------------
--- File    : stop_watch_pkg.vhd
--- Library : stop_watch_lib
+-- File    : mastermind_pkg.vhd
+-- Library : mastermind_lib
 -- Author  : matthias.schaer1@students.fhnw.ch
 -- Company : Institute of Microelectronics (IME) FHNW
 -- Copyright(C) IME
------------------------------------------------------
--- Last commit:
---   $Author:: M.Schaer                             $
---      $Rev::                                      $
---     $Date::             $
 -----------------------------------------------------
 -- Description : This file holds all known constants
 --               and generics.
