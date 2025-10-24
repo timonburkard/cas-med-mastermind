@@ -47,7 +47,7 @@ begin
             g_clk_per_digit => C_NOF_SWAP_CYCLES_SYN
         )
         port map(
-            reset_n      => rst,
+            rst          => rst,
             clk          => clk,
             exact_hits   => exact_hits,
             partial_hits => partial_hits,
