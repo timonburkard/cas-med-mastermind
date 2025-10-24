@@ -10,7 +10,7 @@ entity random_number_generator is
 end random_number_generator;
  
 architecture Behavioral of random_number_generator is
-    constant SEED : STD_LOGIC_VECTOR(15 downto 0) := "1010110011100001";
+    constant SEED : STD_LOGIC_VECTOR(15 downto 0) := "1001011001110001";
 
     signal lfsr_reg : STD_LOGIC_VECTOR(15 downto 0) := SEED;
 begin
@@ -19,6 +19,7 @@ begin
     begin
         if rst = '1' then
             lfsr_reg <= SEED; -- seed value
+            random_number <= "0000000000000000";
         elsif rising_edge(clk) then
             -- 16-bit LFSR with taps at 16,15,13,4
             lfsr_reg <= lfsr_reg(14 downto 0) & 
