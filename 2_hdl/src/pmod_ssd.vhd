@@ -23,7 +23,7 @@ entity pmod_ssd is
         g_clk_per_digit : natural := C_NOF_SWAP_CYCLES_SIM
     );
     port (
-        reset_n        : in  std_ulogic;
+        rst        : in  std_ulogic;
         clk            : in  std_ulogic;
         exact_hits     : in  std_ulogic_vector (2 downto 0);
         partial_hits   : in  std_ulogic_vector (2 downto 0);
@@ -64,7 +64,7 @@ begin
             end if;
 
             -- reset
-            if reset_n = '0' then
+            if rst = '1' then
                 selector <= '0';
             end if;
         end if;
