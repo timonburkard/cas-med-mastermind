@@ -38,21 +38,11 @@ architecture fsm of game_logic is
     ) return std_logic_vector is
         variable counter : integer range 0 to 4 := 0;
     begin
-        if guess(3) = code(3) then
-            counter := counter + 1;
-        end if;
-
-        if guess(2) = code(2) then
-            counter := counter + 1;
-        end if;
-
-        if guess(1) = code(1) then
-            counter := counter + 1;
-        end if;
-
-        if guess(0) = code(0) then
-            counter := counter + 1;
-        end if;
+        for i in 0 to 3 loop
+            if guess(i) = code(i) then
+                counter := counter + 1;
+            end if;
+        end loop;
 
         return std_logic_vector(to_unsigned(counter, 3));
     end function;
