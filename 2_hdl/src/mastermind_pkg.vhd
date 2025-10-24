@@ -14,6 +14,10 @@ library ieee;
     use ieee.std_logic_1164.all;
 
 package mastermind_pkg is
+  -- debounce 1kHz counter
+  constant C_MAX1_SIM : natural := 4;
+  constant C_MAX1_SYN : natural := 124999; --125 MHz > 1 KHz / 124999
+
   -- configure display constants
   constant C_NOF_SWAP_CYCLES_SIM : natural := 1;
   constant C_NOF_SWAP_CYCLES_SYN : natural := 124;
