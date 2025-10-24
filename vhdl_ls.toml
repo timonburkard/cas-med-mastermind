@@ -1,0 +1,5 @@
+[libraries]
+
+lib.files = [
+"2_hdl/tb/tb_game_logic.vhd",
+]
