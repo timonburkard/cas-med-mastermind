@@ -109,7 +109,7 @@ begin
             severity error;
         
         report "Runde 1 beendet" severity note;
-
+        wait for 10 ns;
 
         ----------------------------------------------------------------
         -- Runde 2
@@ -133,7 +133,7 @@ begin
             severity error;
         
         report "Runde 2 beendet" severity note;
-
+        wait for 10 ns;
 
         ----------------------------------------------------------------
         -- Runde 3
@@ -157,7 +157,7 @@ begin
             severity error;
         
         report "Runde 3 beendet" severity note;
-        
+        wait for 10 ns;        
 
         ----------------------------------------------------------------
         -- Runde 4
@@ -181,6 +181,7 @@ begin
             severity error;
         
         report "Runde 4 beendet" severity note;  
+        wait for 10 ns;
 
         ----------------------------------------------------------------
         -- Runde 5
@@ -204,6 +205,7 @@ begin
             severity error;
         
         report "Runde 5 beendet" severity note;
+        wait for 10 ns;
 
         ----------------------------------------------------------------
         -- Runde 6
@@ -227,7 +229,8 @@ begin
             severity error;
         
         report "Runde 6 beendet" severity note;
-       
+        wait for 10 ns;
+
         ----------------------------------------------------------------
         -- Runde 7
         ----------------------------------------------------------------
@@ -250,6 +253,7 @@ begin
             severity error;
         
         report "Runde 7 beendet" severity note;
+        wait for 10 ns;
 
         ----------------------------------------------------------------
         -- Runde 8
