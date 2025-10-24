@@ -1,5 +1,10 @@
+# File names are either absolute or relative to the parent folder of the
+# vhdl_ls.toml file and supports glob-style patterns.
+
 [libraries]
 
-lib.files = [
-"2_hdl/tb/tb_game_logic.vhd",
+# Defines library default
+default.files = [
+  '2_hdl/src/*.vhd',
+  '2_hdl/tb/*.vhd',
 ]
