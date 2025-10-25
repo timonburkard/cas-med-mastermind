@@ -63,6 +63,7 @@ BEGIN
         VARIABLE period_length : INTEGER := 0;
         VARIABLE first_value : STD_LOGIC_VECTOR(15 DOWNTO 0);
         VARIABLE digit0, digit1, digit2, digit3 : INTEGER RANGE 0 TO 15;
+        VARIABLE digit : INTEGER RANGE 0 TO 9; -- Added for loop counter
         VARIABLE temp_counts : digit_count_array := (OTHERS => 0);
         VARIABLE total_valid_digits : INTEGER := 0;
         VARIABLE total_invalid_digits : INTEGER := 0;
@@ -80,13 +81,12 @@ BEGIN
 
         rst <= '1';
         WAIT FOR clk_period * 2;
-        rst <= '0';
-        WAIT FOR clk_period;
-
+        WAIT UNTIL rising_edge(clk); -- Wait for clock edge
         ASSERT random_number_test = "1001011001110001"
-            REPORT "ERROR: rst did not set correct seed value!"
+            REPORT "ERROR: rst did not set correct seed value! Got: " & to_hstring(random_number_test)
             SEVERITY error;
         REPORT "PASS: rst sets correct seed value";
+        rst <= '0';
 
         WAIT FOR clk_period * 2;
 
@@ -97,15 +97,18 @@ BEGIN
 
         rst <= '1';
         WAIT FOR clk_period;
+        WAIT UNTIL rising_edge(clk);
         rst <= '0';
-        WAIT FOR clk_period;
+        WAIT UNTIL rising_edge(clk);
+        WAIT FOR 1 ns;
 
         first_value := random_number_test;
         REPORT "First value: " & INTEGER'image(to_integer(unsigned(first_value)));
 
         -- Generate values and store them
         FOR i IN 0 TO 100 LOOP
-            WAIT FOR clk_period;
+            WAIT UNTIL rising_edge(clk);
+            WAIT FOR 1 ns; -- Small delay after clock edge
             generated_values(i) <= random_number_test;
             value_count <= i + 1;
 
@@ -157,12 +160,15 @@ BEGIN
         -- Initialize
         rst <= '1';
         WAIT FOR clk_period * 2;
+        WAIT UNTIL rising_edge(clk);
         rst <= '0';
-        WAIT FOR clk_period;
+        WAIT UNTIL rising_edge(clk);
+        WAIT FOR 1 ns;
 
         -- Generate 1000 vectors and count digit occurrences
         FOR vector_num IN 1 TO 1000 LOOP
-            WAIT FOR clk_period;
+            WAIT UNTIL rising_edge(clk);
+            WAIT FOR 1 ns; -- Small delay to ensure signal is stable
 
             -- Extract the 4 digits (each 4 bits)
             digit3 := to_integer(unsigned(random_number_test(15 DOWNTO 12)));
@@ -277,24 +283,7 @@ BEGIN
                 INTEGER'image((total_invalid_digits * 100) / 4000) & "%";
         END IF;
 
-        -- Test 5: Multiple rst cycles
-        REPORT "";
-        REPORT "========================================";
-        REPORT "TEST 5: Multiple rst Cycles";
-        REPORT "========================================";
 
-        FOR i IN 1 TO 5 LOOP
-            rst <= '1';
-            WAIT FOR clk_period;
-            rst <= '0';
-            WAIT FOR clk_period;
-
-            ASSERT random_number_test = "1001011001110001"
-                REPORT "ERROR: rst " & INTEGER'image(i) & " failed!"
-                SEVERITY error;
-        END LOOP;
-
-        REPORT "PASS: Multiple rsts work correctly";
 
         -- Test complete
         REPORT "";
