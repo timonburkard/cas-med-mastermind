@@ -18,6 +18,26 @@ set_property PACKAGE_PIN Y14 [get_ports { digit[5] }];
 set_property PACKAGE_PIN T12 [get_ports { digit[6] }];
 set_property PACKAGE_PIN U12 [get_ports { digit_sel }];
 
+# Pmod Header JD
+set_property PACKAGE_PIN T14  [get_ports { guess[0] }];
+set_property PACKAGE_PIN T15  [get_ports { guess[1] }];
+set_property PACKAGE_PIN P14  [get_ports { guess[2] }];
+set_property PACKAGE_PIN R14  [get_ports { guess[3] }];
+set_property PACKAGE_PIN U14  [get_ports { guess[4] }];
+set_property PACKAGE_PIN U15  [get_ports { guess[5] }];
+set_property PACKAGE_PIN V17  [get_ports { guess[6] }];
+set_property PACKAGE_PIN V18  [get_ports { guess[7] }];
+
+# Pmod Header JE
+set_property PACKAGE_PIN V12  [get_ports { guess[8] }];
+set_property PACKAGE_PIN W16  [get_ports { guess[9] }];
+set_property PACKAGE_PIN J15  [get_ports { guess[10] }];
+set_property PACKAGE_PIN H15  [get_ports { guess[11] }];
+set_property PACKAGE_PIN V13  [get_ports { guess[12] }];
+set_property PACKAGE_PIN U17  [get_ports { guess[13] }];
+set_property PACKAGE_PIN T17  [get_ports { guess[14] }];
+set_property PACKAGE_PIN Y17  [get_ports { guess[15] }];
+
 # IO standard
 set_property IOSTANDARD LVCMOS33 [get_ports *];
 
