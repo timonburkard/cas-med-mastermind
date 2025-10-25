@@ -71,7 +71,7 @@ begin
     rst_process : process
     begin
         rst <= '1';
-        wait for 20 ns;
+        wait for 24 ns;
         rst <= '0';
         report "Reset released";
         wait;
@@ -84,17 +84,18 @@ begin
     stimulus_process : process
     begin
         -- Warte auf Ende des Resets
-        wait for 25 ns;
+        wait for 24 ns;
 
         ----------------------------------------------------------------
         -- Runde 1
         ----------------------------------------------------------------
-        
-        guess           <= "0000000000000000"; -- 0000
-        random_number   <= "0000010011010010"; -- 1234
+
+        guess            <= "0000000000000000"; -- 0000
+        random_number    <= "0001001000110100"; -- 1234
         guess_enter_sync <= '1';
-        wait for 10 ns;
+        wait for 8 ns;
         guess_enter_sync <= '0';
+        wait for 24 ns;
 
         assert exact_hits = "000"
             report "exact_hits, erwartet 000, bekommen " & to_string(exact_hits)
@@ -109,16 +110,17 @@ begin
             severity error;
         
         report "Runde 1 beendet" severity note;
-        wait for 10 ns;
+        wait for 24 ns;
 
         ----------------------------------------------------------------
         -- Runde 2
         ----------------------------------------------------------------
-        guess           <= "0000000000000011"; -- 0003
-        random_number   <= "0000010011010010"; -- 1234
+        guess            <= "0000000000000011"; -- 0003
+        random_number    <= "0001001000110100"; -- 1234
         guess_enter_sync <= '1';
-        wait for 10 ns;
+        wait for 8 ns;
         guess_enter_sync <= '0';
+        wait for 24 ns;
 
         assert exact_hits = "000"
             report "exact_hits, erwartet 000, bekommen " & to_string(exact_hits)
@@ -133,16 +135,17 @@ begin
             severity error;
         
         report "Runde 2 beendet" severity note;
-        wait for 10 ns;
+        wait for 24 ns;
 
         ----------------------------------------------------------------
         -- Runde 3
         ----------------------------------------------------------------
-        guess           <= "0000000000001101"; -- 0013
-        random_number   <= "0000010011010010"; -- 1234
+        guess            <= "0000000000010011"; -- 0013
+        random_number    <= "0001001000110100"; -- 1234
         guess_enter_sync <= '1';
-        wait for 10 ns;
+        wait for 8 ns;
         guess_enter_sync <= '0';
+        wait for 24 ns;
 
         assert exact_hits = "000"
             report "exact_hits, erwartet 000, bekommen " & to_string(exact_hits)
@@ -157,16 +160,17 @@ begin
             severity error;
         
         report "Runde 3 beendet" severity note;
-        wait for 10 ns;        
+        wait for 24 ns;
 
         ----------------------------------------------------------------
         -- Runde 4
         ----------------------------------------------------------------
-        guess           <= "0000010100001001"; -- 1289
-        random_number   <= "0000010011010010"; -- 1234
+        guess            <= "0001001010001001"; -- 1289
+        random_number    <= "0001001000110100"; -- 1234
         guess_enter_sync <= '1';
-        wait for 10 ns;
+        wait for 8 ns;
         guess_enter_sync <= '0';
+        wait for 24 ns;
 
         assert exact_hits = "010"
             report "exact_hits, erwartet 010, bekommen " & to_string(exact_hits)
@@ -181,16 +185,17 @@ begin
             severity error;
         
         report "Runde 4 beendet" severity note;  
-        wait for 10 ns;
+        wait for 24 ns;
 
         ----------------------------------------------------------------
         -- Runde 5
         ----------------------------------------------------------------
-        guess           <= "0000010011011101"; -- 1245
-        random_number   <= "0000010011010010"; -- 1234
+        guess            <= "0001001001000101"; -- 1245
+        random_number    <= "0001001000110100"; -- 1234
         guess_enter_sync <= '1';
-        wait for 10 ns;
+        wait for 8 ns;
         guess_enter_sync <= '0';
+        wait for 24 ns;
 
         assert exact_hits = "010"
             report "exact_hits, erwartet 010, bekommen " & to_string(exact_hits)
@@ -205,19 +210,20 @@ begin
             severity error;
         
         report "Runde 5 beendet" severity note;
-        wait for 10 ns;
+        wait for 24 ns;
 
         ----------------------------------------------------------------
         -- Runde 6
         ----------------------------------------------------------------
-        guess           <= "0000010100001110"; -- 1294
-        random_number   <= "0000010011010010"; -- 1234
+        guess            <= "0001001010010100"; -- 1294
+        random_number    <= "0001001000110100"; -- 1234
         guess_enter_sync <= '1';
-        wait for 10 ns;
+        wait for 8 ns;
         guess_enter_sync <= '0';
+        wait for 24 ns;
 
-        assert exact_hits = "101"
-            report "exact_hits, erwartet 101, bekommen " & to_string(exact_hits)
+        assert exact_hits = "011"
+        report "exact_hits, erwartet 011, bekommen " & to_string(exact_hits)
             severity error;
 
         assert partial_hits = "000"
@@ -229,19 +235,20 @@ begin
             severity error;
         
         report "Runde 6 beendet" severity note;
-        wait for 10 ns;
+        wait for 24 ns;
 
         ----------------------------------------------------------------
         -- Runde 7
         ----------------------------------------------------------------
-        guess           <= "0000010011011100"; -- 1244
-        random_number   <= "0000010011010010"; -- 1234
+        guess            <= "0001001001000100"; -- 1244
+        random_number    <= "0001001000110100"; -- 1234
         guess_enter_sync <= '1';
-        wait for 10 ns;
+        wait for 8 ns;
         guess_enter_sync <= '0';
+        wait for 24 ns;
 
-        assert exact_hits = "101"
-            report "exact_hits, erwartet 101, bekommen " & to_string(exact_hits)
+        assert exact_hits = "011"
+        report "exact_hits, erwartet 011, bekommen " & to_string(exact_hits)
             severity error;
 
         assert partial_hits = "000"
@@ -253,32 +260,31 @@ begin
             severity error;
         
         report "Runde 7 beendet" severity note;
-        wait for 10 ns;
+        wait for 24 ns;
 
         ----------------------------------------------------------------
-        -- Runde 8
+        -- Runde 8 (same asserts as in round 7 because max rounds reached)
         ----------------------------------------------------------------
-        guess           <= "0000010011010010"; -- 1234
-        random_number   <= "0000010011010010"; -- 1234
+        guess            <= "0001001000110100"; -- 1234
+        random_number    <= "0001001000110100"; -- 1234
         guess_enter_sync <= '1';
-        wait for 10 ns;
+        wait for 8 ns;
         guess_enter_sync <= '0';
+        wait for 24 ns;
 
-        assert exact_hits = "100"
-            report "exact_hits, erwartet 100, bekommen " & to_string(exact_hits)
+        assert exact_hits = "011"
+        report "exact_hits, erwartet 011, bekommen " & to_string(exact_hits)
             severity error;
 
         assert partial_hits = "000"
             report "partial_hits, erwartet 000, bekommen " & to_string(partial_hits)
             severity error;
-                
-        assert round = "1000"
-            report "round, erwartet 1000, bekommen " & to_string(round)
+
+        assert round = "0111"
+        report "round, erwartet 0111, bekommen " & to_string(round)
             severity error;
-        
-        report "Runde 8 beendet, aber nach 7 sollte Schluss sein" severity error;
 
-
+        report "Runde 8 beendet, nach 7 war aber schon Schluss" severity note;
         wait;
     end process stimulus_process;
 
