@@ -9,3 +9,4 @@ vcom -work mastermind_lib ../2_hdl/src/mastermind.vhd
 vcom -work mastermind_lib ../2_hdl/tb/tb_generator.vhd
 vcom -work mastermind_lib ../2_hdl/tb/tb_pmod_ssd.vhd
 vcom -work mastermind_lib ../2_hdl/tb/tb_debounce.vhd
+vcom -work mastermind_lib ../2_hdl/tb/tb_game_logic.vhd
