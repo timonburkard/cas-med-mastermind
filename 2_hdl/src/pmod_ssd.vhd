@@ -66,6 +66,7 @@ begin
             -- reset
             if rst = '1' then
                 selector <= '0';
+                count    <= 0;
             end if;
         end if;
 
