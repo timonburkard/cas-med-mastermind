@@ -5,9 +5,8 @@ set_property PACKAGE_PIN K18 [get_ports { guess_enter }];
 
 # LEDs
 set_property PACKAGE_PIN M14 [get_ports { round[0] }];
-set_property PACKAGE_PIN M15  [get_ports { round[1] }];
-set_property PACKAGE_PIN G14  [get_ports { round[2] }];
-set_property PACKAGE_PIN D18  [get_ports { round[3] }];
+set_property PACKAGE_PIN M15 [get_ports { round[1] }];
+set_property PACKAGE_PIN G14 [get_ports { round[2] }];
 
 # Pmod Header JC
 set_property PACKAGE_PIN V15 [get_ports { digit[0] }];
