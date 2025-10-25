@@ -6,3 +6,6 @@ vcom -work mastermind_lib ../2_hdl/src/prescaler.vhd
 vcom -work mastermind_lib ../2_hdl/src/debounce.vhd
 vcom -work mastermind_lib ../2_hdl/src/game_logic.vhd
 vcom -work mastermind_lib ../2_hdl/src/mastermind.vhd
+vcom -work mastermind_lib ../2_hdl/tb/tb_generator.vhd
+vcom -work mastermind_lib ../2_hdl/tb/tb_pmod_ssd.vhd
+vcom -work mastermind_lib ../2_hdl/tb/tb_debounce.vhd
