@@ -33,9 +33,11 @@ architecture fsm of game_logic is
     signal guess_value : values_t;
     signal code_value  : values_t;
 
+    -- calc_hits
+    -- returns (5 downto 0): exact hits is (5 downto 3) & partial hits is (2 downto 0)
     function calc_hits(
-        guess : values_t;
-        code  : values_t
+        guess : values_t; -- User's guess
+        code  : values_t  -- Correct code
     ) return std_logic_vector is
         variable counter_exact   : integer range 0 to 4 := 0;                 -- Counter for the number of exact hits
         variable counter_partial : integer range 0 to 4 := 0;                 -- Counter for the number of partial hits
@@ -72,15 +74,15 @@ begin
     round <= std_logic_vector(to_unsigned(round_counter, round'length));
 
     -- adapters for easy handling
-    guess_value(3) <= guess(15 downto 12);
-    guess_value(2) <= guess(11 downto 8);
-    guess_value(1) <= guess(7 downto 4);
-    guess_value(0) <= guess(3 downto 0);
+    guess_value(3) <= guess(15 downto 12); -- Guess digit 3 (most significant digit)
+    guess_value(2) <= guess(11 downto 8);  -- Guess digit 2
+    guess_value(1) <= guess(7 downto 4);   -- Guess digit 1
+    guess_value(0) <= guess(3 downto 0);   -- Guess digit 0 (least significant digit)
 
-    code_value(3) <= code(15 downto 12);
-    code_value(2) <= code(11 downto 8);
-    code_value(1) <= code(7 downto 4);
-    code_value(0) <= code(3 downto 0);
+    code_value(3) <= code(15 downto 12); -- Code digit 3 (most significant digit)
+    code_value(2) <= code(11 downto 8);  -- Code digit 2
+    code_value(1) <= code(7 downto 4);   -- Code digit 1
+    code_value(0) <= code(3 downto 0);   -- Code digit 0 (least significant digit)
 
     sequential : process (all)
         variable hits : std_logic_vector(5 downto 0);
@@ -121,7 +123,7 @@ begin
                     end if;
 
                 when STATE_END =>
-                    -- nothing to do
+                    -- nothing to do, game is over, we just wait for reset
 
                 when others =>
                     next_state <= STATE_RESET; -- error, should never happen
