@@ -25,6 +25,8 @@ architecture struct of mastermind is
     signal p1khz            : std_logic; -- 1 kHz pulse from prescaler
 begin
     game_logic : entity work.game_logic
+        generic map(
+            G_MAX_ROUNDS => C_MAX_ROUNDS)
         port map(
             clk              => clk,
             rst              => rst,

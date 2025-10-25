@@ -6,6 +6,9 @@ use ieee.numeric_std.all;
 use work.mastermind_pkg.all;
 
 entity game_logic is
+    generic (
+        G_MAX_ROUNDS : natural range 3 to 15 := C_MAX_ROUNDS
+    );
     port (
         clk              : in std_logic;                     -- 125 MHz clock
         rst              : in std_logic;                     -- Synchronous high-active reset
@@ -118,7 +121,7 @@ begin
                         next_state <= STATE_END;
                     end if;
 
-                    if round_counter >= 7 then
+                    if round_counter >= G_MAX_ROUNDS then
                         next_state <= STATE_END;
                     end if;
 

@@ -14,6 +14,9 @@ library ieee;
     use ieee.std_logic_1164.all;
 
 package mastermind_pkg is
+  -- game logic
+  constant C_MAX_ROUNDS : natural range 3 to 15 := 7;
+  
   -- debounce 1kHz counter
   constant C_MAX1_SIM : natural := 4;
   constant C_MAX1_SYN : natural := 124999; --125 MHz > 1 KHz / 124999
