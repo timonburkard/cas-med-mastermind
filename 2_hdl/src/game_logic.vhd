@@ -65,6 +65,7 @@ architecture fsm of game_logic is
                             guess_matched(i) := true;
                             code_matched(j)  := true;
                             counter_partial  := counter_partial + 1;
+                            exit; -- no need to check further for the current guess digit; move to the next guess digit
                         end if;
                     end if;
                 end loop;
