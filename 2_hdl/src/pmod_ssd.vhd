@@ -55,7 +55,7 @@ begin
                 digit_sel <= selector;
 
                 -- store number to output
-                if selector = '0' then
+                if selector = '1' then
                     pmod_value <= to_integer(unsigned(exact_hits));
                 else
                     pmod_value <= to_integer(unsigned(partial_hits));
