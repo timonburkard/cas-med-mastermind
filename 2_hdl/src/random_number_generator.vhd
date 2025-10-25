@@ -43,29 +43,23 @@ begin
     -- sequential process for updating random_number
     p_sequential: process(all)
     begin
-        -- store lfsr value in random_number but only if the number is in a valid range (<10)
-        if lfsr_reg(15 downto 12) < "1010" then
-            random_number(15 downto 12) <= lfsr_reg(15 downto 12);
-        else
-            random_number(15 downto 12) <= random_number(15 downto 12);
-        end if;
-
-        if lfsr_reg(11 downto 8) < "1010" then
-            random_number(11 downto 8) <= lfsr_reg(11 downto 8);
-        else
-            random_number(11 downto 8) <= random_number(11 downto 8);
-        end if;
-
-        if lfsr_reg(7 downto 4) < "1010" then
-            random_number(7 downto 4) <= lfsr_reg(7 downto 4);
-        else
-            random_number(7 downto 4) <= random_number(7 downto 4);
-        end if;
-
-        if lfsr_reg(3 downto 0) < "1010" then
-            random_number(3 downto 0) <= lfsr_reg(3 downto 0);
-        else
-            random_number(3 downto 0) <= random_number(3 downto 0);
+        if rising_edge(clk) then
+            -- store lfsr value in random_number but only if the number is in a valid range (<10)
+            if lfsr_reg(15 downto 12) < "1010" then
+                random_number(15 downto 12) <= lfsr_reg(15 downto 12);
+            end if;
+    
+            if lfsr_reg(11 downto 8) < "1010" then
+                random_number(11 downto 8) <= lfsr_reg(11 downto 8);
+            end if;
+    
+            if lfsr_reg(7 downto 4) < "1010" then
+                random_number(7 downto 4) <= lfsr_reg(7 downto 4);
+            end if;
+    
+            if lfsr_reg(3 downto 0) < "1010" then
+                random_number(3 downto 0) <= lfsr_reg(3 downto 0);
+            end if;
         end if;
     end process;
 
