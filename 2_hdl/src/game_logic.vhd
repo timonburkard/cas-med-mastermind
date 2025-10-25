@@ -129,6 +129,8 @@ begin
             end case;
 
             if rst = '1' then
+                current_state <= STATE_RESET;
+                next_state    <= STATE_RESET;
                 round_counter <= 0;
                 exact_hits    <= (others => '0');
                 partial_hits  <= (others => '0');
